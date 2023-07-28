@@ -35,17 +35,12 @@ async function fetchAndShowResult(url){
 }
 
 function createImageCard(item){
-    const { urls, description } = item;
+    const { urls } = item;
     const image = urls.small;
     const imageTemplate = `
     <div class="column">
         <div class="card">
-            <a class="card-media">
-                <img src="${image}" alt="Image cant be loaded" width="100%">
-             </a>
-        </div>
-        <div class="card-content">
-            <h4>${description}</h4>
+            <img src="${image}" alt="Image cant be loaded" width="100%">
         </div>
     </div>`
 
