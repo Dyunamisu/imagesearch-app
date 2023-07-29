@@ -7,14 +7,6 @@ const result = document.getElementById("result");
 let page = 1;
 let isSearching = false;
 
-// try fetching json from api
-// fetch(`https://api.unsplash.com/search/photos?client_id=oVyFSjI8ADAJA74MF58x7YittGXe-4TEzSCHl35IKNA&query=dog`)
-//     .then(response => response.json())
-//     .then(json => {
-//         const imagePath = `<img src="${json.results[1].urls.small}">`
-//         result.innerHTML += imagePath || "<p>no image</p>" ;
-//     })
-
 async function fetchData(url){
     try{
         const response = await fetch(url);
@@ -32,6 +24,9 @@ async function fetchAndShowResult(url){
     if(data && data.results){ //check empty
         showResults(data.results); 
     }
+    else{
+        showResults(data);
+    }
 }
 
 function createImageCard(item){
@@ -40,7 +35,9 @@ function createImageCard(item){
     const imageTemplate = `
     <div class="column">
         <div class="card">
-            <img src="${image}" alt="Image cant be loaded" width="100%">
+            <a href="${image}">
+                <img src="${image}" alt="Image cant be loaded" width="100%">
+            </a>
         </div>
     </div>`
 
@@ -54,7 +51,6 @@ function clearResults(){
 function showResults(items){
     const newContent = items.map(
         (item) => createImageCard(item)).join("");
-        console.log(newContent);
     result.innerHTML += newContent || "<p>No image found</p>";
 }
 
@@ -70,13 +66,29 @@ async function handleSearch(event){
         query.value = "";
     }
 }
+function detectEnd(){
+    const { scrollTop, clientHeight, scrollHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight - 20){
+        loadMoreResults();
+    }
+}
+async function loadMoreResults(){
+    if(isSearching){
+        return;
+    }
+    page++;
+    const url = `https://api.unsplash.com/photos/?client_id=${apiKey}&page=${page}`
+    await fetchAndShowResult(url);
+}
 
 form.addEventListener('submit',handleSearch);
+window.addEventListener('scroll', detectEnd);
+window.addEventListener('resize', detectEnd);
 
-// async function init(){
-//     clearResults();
-//     const url = `https://api.unsplash.com/photos/?client_id=${apiKey}`;
-//     await fetchAndShowResult(url);
-// }
+async function init(){
+    clearResults();
+    const url = `https://api.unsplash.com/photos/?client_id=${apiKey}&page=${page}`;
+    await fetchAndShowResult(url);
+}
 
-// init();
+init();

@@ -25,10 +25,6 @@ body{
     align-items: center;
 }
 
-.search-box > h1{
-    color: #072d4b;
-}
-
 .search-box input{
     padding: 8px;
     width: 350px;
@@ -66,8 +62,8 @@ body{
 #result{
     margin: 45px;
     display: flex;
-    max-width: 950px;
-    gap: 50px;
+    max-width: 1400px;
+    gap: 50px 150px;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
@@ -97,4 +93,10 @@ h1{
     border-radius: 10px;
     text-align: center;
     margin: 30px;
+}
+
+.search-box > a{
+    background: none;
+    text-decoration: none;
+    color: #072d4b;
 }
